@@ -1,6 +1,5 @@
 const db = require("../database/db.js");
 const crypto = require("node:crypto");
-const bcrypt = require("bcryptjs");
 
 const insert_session = db.prepare(/*sql*/`
 INSERT INTO sessions  (id, user_id, expires_at)
