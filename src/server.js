@@ -5,10 +5,11 @@ const signup = require("./routes/sign-up.js");
 const login = require("./routes/log-in.js");
 const logout = require("./routes/log-out.js");
 const confessions = require("./routes/confessions.js");
+const { getSession, removeSession } = require("./model/session");
 
 const body = express.urlencoded({ extended: false });
-const cookies = cookieParser(process.env.COOKIE_SECRET);
-
+const cookies = cookieParser('secret');
+//change process.env.COOKIE_SECRET to secret
 const server = express();
 
 server.use((req, res, next) => {
@@ -25,5 +26,21 @@ server.post("/log-in", body, login.post);
 server.post("/log-out", logout.post);
 server.get("/confessions/:user_id", confessions.get);
 server.post("/confessions/:user_id", body, confessions.post);
+
+
+server.use(((req, res, next) => {
+  const signedCookieId = req.signedCookies.sid
+  const session = getSession(signedCookieId)
+  if (session) {
+    if (Date() > session.expiry_at)
+      removeSession(signedCookieId)
+    res.clearCookie("sid")
+
+  } else {
+    req.session = session
+  }
+  next()
+})
+)
 
 module.exports = server;

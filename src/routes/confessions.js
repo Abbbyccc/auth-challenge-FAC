@@ -5,11 +5,14 @@ const {
 const { getSession } = require("../model/session");
 const { Layout } = require("../templates.js");
 
+
 function get(req, res) {
   const sid = req.signedCookies.sid;
   const session = getSession(sid);
-  const current_user = session && session.user_id;
+  const current_user = session && session.user_id
+  // what does this mean?
   const page_owner = Number(req.params.user_id);
+
   if (current_user !== page_owner) {
     return res.status(401).send("<h1>You aren't allowed to see that</h1>");
   }
@@ -43,6 +46,8 @@ function get(req, res) {
       )
       .join("")}
       </ul>
+      <form method = "POST" action = "/log-out" > 
+      <button class="Button">Log out</button>
     </div>
   `;
   const body = Layout({ title, content });
@@ -52,7 +57,7 @@ function get(req, res) {
 function post(req, res) {
   const sid = req.signedCookies.sid;
   const session = getSession(sid);
-  const current_user = session && session.user_id;
+  const current_user = session && session.user_id
   if (!req.body.content || !current_user) {
     return res.status(401).send("<h1>Confession failed</h1>");
   }

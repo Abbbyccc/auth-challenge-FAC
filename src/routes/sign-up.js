@@ -2,6 +2,9 @@ const { Layout } = require("../templates.js");
 const { createSession } = require("../model/session")
 const { createUser } = require("../model/user")
 const bcrypt = require("bcryptjs");
+
+
+
 // const { restart } = require("nodemon");
 
 function get(req, res) {
@@ -32,9 +35,10 @@ function post(req, res) {
     res.status(400).send("Bad input");
   } else {
     // res.send("to-do");
+
     bcrypt.hash(password, 12).then((hashed) => {
       const user = createUser(email, hashed)
-      const session_id = createSession(user.id)     
+      const session_id = createSession(user.id)
       res.cookie("sid", session_id, {
         signed: true,
         httpOnly: true,
