@@ -10,6 +10,8 @@ function createUser(email, hash) {
   return insert_user.get({ email, hash });
 }
 
+//can i use .run above?
+
 const select_user_by_email = db.prepare(/*sql*/ `
   SELECT id, email, hash, created_at FROM users WHERE email = ?
 `);
