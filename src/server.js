@@ -8,8 +8,10 @@ const confessions = require("./routes/confessions.js");
 const { getSession, removeSession } = require("./model/session");
 
 const body = express.urlencoded({ extended: false });
-const cookies = cookieParser('secret');
-//change process.env.COOKIE_SECRET to secret
+
+
+const cookies = cookieParser(process.env.COOKIE_SECRET);
+//change process.env.COOKIE_SECRET  to secret
 const server = express();
 
 server.use((req, res, next) => {
