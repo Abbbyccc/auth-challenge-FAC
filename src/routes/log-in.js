@@ -32,8 +32,8 @@ function post(req, res) {
   if (!email || !password || !user) {
     return res.status(400).send("<h1>Login failed</h1>");
   }
-  bcrypt.compare(password, user.hash).then((hash) => {
-    if (!hash) {
+  bcrypt.compare(password, user.hash).then((match) => {
+    if (!match) {
       return res.status(400).send("<h1>Login failed</h1>");
     } else {
       const session_id = createSession(user.id)
@@ -43,9 +43,9 @@ function post(req, res) {
         maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
         sameSite: "lax",
       })
-      res.redirect(`/confessions/${user.id}`);
+      res.redirect(`/confessions/${user.id}`)
     }
-  });
+  })
 }
 
 
@@ -58,3 +58,19 @@ function post(req, res) {
  */
 
 module.exports = { get, post };
+
+
+// bcrypt.compare(password, user.hash).then((hash) => {
+//   if (!hash) {
+//     return res.status(400).send("<h1>Login failed</h1>");
+//   } else {
+//     const session_id = createSession(user.id)
+//     res.cookie("sid", session_id, {
+//       signed: true,
+//       httpOnly: true,
+//       maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
+//       sameSite: "lax",
+//     })
+//     res.redirect(`/confessions/${user.id}`);
+//   }
+// });
